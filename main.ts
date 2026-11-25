@@ -21,6 +21,9 @@ function main(): void {
   if (text !== ENTRY || text.includes("\n") || text.includes("\r")) {
     throw new Error("entry must be a single line with no surrounding whitespace");
   }
+  if (/[\u0000-\u001f\u007f]/.test(text)) {
+    throw new Error("entry must not contain control characters");
+  }
   const outDir = process.env.MAKEFUN_OUTPUT_DIR || "output";
   mkdirSync(outDir, { recursive: true });
   writeFileSync(join(outDir, "entry.txt"), ENTRY, "utf8");
